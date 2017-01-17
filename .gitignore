@@ -1,3 +1,2 @@
 ﻿#Gitignore File
-nothing
-node_modules/       # exclude folder node_modules  
+node_modules
