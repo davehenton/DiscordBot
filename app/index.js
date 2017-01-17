@@ -1,7 +1,7 @@
 var Discord = require("discord.js");
 var bot = new Discord.Client();
 
-var time = require("./time.js");
+var zeit = require("./time.js");
 
 bot.on("message", msg => {
   // Set the prefix
@@ -16,7 +16,7 @@ bot.on("message", msg => {
   } 
   if (msg.content.startsWith(prefix + "time")) {
 	
-    msg.channel.sendMessage(time.getTime);
+    msg.channel.sendMessage(zeit.getTime);
   } 
 
   else if (msg.content.startsWith(prefix + "foo")) {
@@ -26,4 +26,4 @@ bot.on("message", msg => {
 
 bot.login("MjY4ODIwNTY4MDU5NDEyNDgx.C1gYyg.SxC5amkEx1NI8Hnqw76JP0IfpxY");
 console.log("Bot online!");
-console.log(time.getTime);
+console.log(zeit.getTime);
