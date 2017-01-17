@@ -1,22 +1,21 @@
 {
-  "name": "zellesbot",
+  "name": "discordbot",
   "version": "1.0.0",
   "description": "A bot for Discord",
-  "main": "app/index.js",
+  "main": "index.js",
   "scripts": {
-	"start: "node app/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Zelle97/ZellesBot.git"
+    "url": "git+https://github.com/Zelle97/DiscordBot.git"
   },
   "author": "fzr",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Zelle97/ZellesBot/issues"
+    "url": "https://github.com/Zelle97/DiscordBot/issues"
   },
-  "homepage": "https://github.com/Zelle97/ZellesBot#readme",
+  "homepage": "https://github.com/Zelle97/DiscordBot#readme",
   "dependencies": {
     "discord.js": "^11.0.0"
   }
