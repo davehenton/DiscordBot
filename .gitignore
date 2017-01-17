@@ -1,1 +1,2 @@
-node_modules/       # exclude folder named example  
+#Gitignore File
+node_modules/       # exclude folder node_modules  
