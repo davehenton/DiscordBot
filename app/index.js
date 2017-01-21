@@ -2,6 +2,7 @@ var Discord = require("discord.js");
 var bot = new Discord.Client();
 
 var basicFunctions = require("./basicFunctions.js");
+var lolFunctions = require("./processRiotApiData.js");
 
 bot.on("message", msg => {
   // Set the prefix
@@ -17,6 +18,11 @@ bot.on("message", msg => {
   if (msg.content.startsWith(prefix + "time")) {
 
     msg.channel.sendMessage(basicFunctions.getTime());
+  }
+  if (msg.content.startsWith(prefix + "lol")) {
+
+    let args = msg.content.split(" ").slice(1);
+    msg.channel.sendMessage(lolFunctions.getRankedInfo(args[0]));
   }
 
   else if (msg.content.startsWith(prefix + "foo")) {
