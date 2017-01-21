@@ -13,6 +13,7 @@ bot.on("message", msg => {
   if(msg.author.bot) return;
 
   if (msg.content.startsWith(prefix + "ping")) {
+
     msg.channel.sendMessage("pong!");
   }
   if (msg.content.startsWith(prefix + "time")) {
@@ -20,9 +21,11 @@ bot.on("message", msg => {
     msg.channel.sendMessage(basicFunctions.getTime());
   }
   if (msg.content.startsWith(prefix + "lol")) {
-
     let args = msg.content.split(" ").slice(1);
-    msg.channel.sendMessage(lolFunctions.getRankedInfo(args[0]));
+    let z = args.length;
+    let name = args.join();
+    name = name.replace(/,/g, "");
+    msg.channel.sendMessage(lolFunctions.getRankedInfo(name));
   }
 
   else if (msg.content.startsWith(prefix + "foo")) {
