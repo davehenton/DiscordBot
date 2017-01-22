@@ -1,4 +1,4 @@
-var apiFunction = require('./riotApi.js');
+var apiFunction = require('./riotApiClassesAndFunctions/riotApiFunctions.js');
 
 functions = {
 
@@ -7,14 +7,15 @@ functions = {
       var summonerId = apiFunction.getId(summonerName);
       var summonerData = apiFunction.getData(summonerId);
 
-      summonerData = JSON.stringify(summonerData);
+      var returnString = summonerName + ": SoloQ: "+summonerData.SoloqTier+" "+summonerData.SoloqDivision+" FlexQ: "+summonerData.FlexqTier+" "+summonerData.FlexqDivision;
 
-      return summonerData;
+      return returnString;
 
   }
 
 }
 
-
+// var data = functions.getRankedInfo('SkumbagZelle');
+// console.log(data);
 
 module.exports = functions;
