@@ -27,6 +27,17 @@ bot.on("message", msg => {
     name = name.replace(/,/g, "");
     msg.channel.sendMessage(lolFunctions.getRankedInfo(name));
   }
+  if (msg.content.startsWith(prefix + "game")) {
+    let args = msg.content.split(" ").slice(1);
+    let z = args.length;
+    let name = args.join();
+    name = name.replace(/,/g, "");
+    let messages = lolFunctions.getGameInfo(name);
+    for(i=0;i<10;i++){
+      msg.channel.sendMessage(messages[i]);
+    }
+
+  }
 
   else if (msg.content.startsWith(prefix + "foo")) {
     msg.channel.sendMessage("bar!");
