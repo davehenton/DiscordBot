@@ -2,18 +2,18 @@ function rank() {
 
 }
 
-rank.prototype.setTier(tier) {
+rank.prototype.setTier = function(tier) {
   this.tier = tier;
-}
-rank.prototype.setDivision(division) {
+};
+rank.prototype.setDivision = function(division) {
   this.division = division;
-}
+};
 
-rank.prototype.getTier() {
+rank.prototype.getTier = function() {
   return this.tier;
-}
-rank.prototype.getDivision() {
+};
+rank.prototype.getDivision = function() {
   return this.division;
-}
+};
 
 module.exports = rank;
