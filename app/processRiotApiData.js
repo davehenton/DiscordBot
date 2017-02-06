@@ -3,17 +3,18 @@ var summonerInfo = require('./riotApiClassesAndFunctions/class.summonerInfo.js')
 
 functions = {
 
-  getRankedInfo: function(summonerName){
+  getRankedInfo: function(summonerName,sendMessage){
       var summonerName = summonerName.toLowerCase();
       var summonerId = apiFunction.getId(summonerName);
       var summoner = new summonerInfo();
+
       summoner.setsummonerId(summonerId);
 
       var summoner = apiFunction.getData(summoner);
 
       var returnString = summonerName + ": SoloQ: "+summoner.SoloqTier+" "+summoner.SoloqDivision+" FlexQ: "+summoner.FlexqTier+" "+summoner.FlexqDivision;
 
-      return returnString;
+      sendMessage(returnString);
 
   },
 

@@ -31,14 +31,13 @@ functions = {
   //Call der mir daten liefert
   getData: function (summoner){
     var summonerId = summoner.summonerId;
-    console.log(summonerId);
-    console.log(summoner.SoloqTier);
+
     request.get(
         'https://euw.api.pvp.net/api/lol/euw/v2.5/league/by-summoner/'+summonerId+'/entry?api_key=RGAPI-b74a4bbe-b4bc-47d3-9943-4d8c8b3bcf15',
         { json: { key: 'value' } },
         function (error, response, body) {
             if (!error && response.statusCode == 200) {
-
+              console.log("hier")
               try{
 
                 summoner.setSoloqTier(body[summonerId][0].tier);
@@ -71,7 +70,7 @@ functions = {
     );
 
     while (summoner.SoloqTier === undefined ) {
-      //console.log("hier");
+      console.log("hier");
       require('deasync').runLoopOnce();
     }
     return summoner;

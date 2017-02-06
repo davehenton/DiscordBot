@@ -1,5 +1,6 @@
 function summoner () {
 
+
 }
 
 summoner.prototype.setId = function(id) {

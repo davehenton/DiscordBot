@@ -4,32 +4,35 @@ var rank = require('./rank');
 
 functions = {
 
-    getSummonerId: function (summoners){
-      var arraySize = summoners.lenght;
+    getSummonerId: function (summoners,callback){
+      var arraySize = summoners.length;
       var names = [];
       //TODO url formatieren
-      for(i = 0; i <= arraySize; i++) {
-        names[i] = summoners[i].getName();
+      for(i = 0; i < arraySize; i++) {
+        names[i] = summoners[i].formattedName;
       }
       names.join();
+
 
       request.get(
           'https://euw.api.pvp.net/api/lol/euw/v1.4/summoner/by-name/'+names+'?api_key=RGAPI-b74a4bbe-b4bc-47d3-9943-4d8c8b3bcf15',
           { json: { key: 'value' } },
           function (error, response, body) {
               if (!error && response.statusCode == 200) {
-                console.log("hier")
+
                 for(k = 0; k < arraySize; k++){
                   for(i = 0; i < Object.keys(body).length; i++) {
 
-                    if(summoners[k].getName() == body[summoners[k].getFormattedName()].name ) {
-                      summoners[k].setId(body[summoners[k].getFormattedName()].id);
-                      summoners[k].setName(body[summoners[k].getFormattedName()].name);
-                      console.log(summoner[0]);
+                    if(summoners[k].name == body[summoners[k].formattedName].name) {
+
+                      summoners[k].id = body[summoners[k].formattedName].id;
+                      summoners[k].name = body[summoners[k].formattedName].name;
+
                     }
                   }
                 }
 
+                callback(summoners);
               }
               if (error) {
                 console.log(error);
@@ -38,19 +41,20 @@ functions = {
            }
       );
 
-      return summoners;
+
 
     },
 
-    getSummonerRank: function (summoners){
+    getSummonerRank: function (summoners,callback){
 
       var arraySize = summoners.length;
 
       var ids = [];
       for(i = 0; i < arraySize; i++) {
-        ids[i] = summoners[i].getId();
+        ids[i] = summoners[i].id;
       }
       ids.join();
+
 
       request.get(
           'https://euw.api.pvp.net/api/lol/euw/v2.5/league/by-summoner/'+ids+'/entry?api_key=RGAPI-b74a4bbe-b4bc-47d3-9943-4d8c8b3bcf15',
@@ -60,24 +64,20 @@ functions = {
 
 
                 for(k = 0; k < arraySize; k++){
-                  for(i = 0; i < Object.keys(body[summoners[k].getId()]).length; i++) {
+                  for(i = 0; i < Object.keys(body[summoners[k].id]).length; i++) {
 
-                    if(body[summoners[k].getId()][i].queue == "RANKED_SOLO_5x5"){
-                      soloQ = new rank();
-                      soloQ.setTier(body[summoners[k].getId()][i].tier);
-                      soloQ.setDivision(body[summoners[k].getId()][i].entries[0].division)
-                      console.log(soloQ);
-                      summoners[k].setSoloQ(soloQ);
+                    if(body[summoners[k].id][i].queue == "RANKED_SOLO_5x5"){
+
+                      summoners[k].soloQ.tier = body[summoners[k].id][i].tier;
+                      summoners[k].soloQ.division = body[summoners[k].id][i].entries[0].division;
 
                     }
-                    if(body[summoners[k].getId()][i].queue == "RANKED_FLEX_SR"){
-                      flexQ = new rank();
-                      flexQ.setTier(body[summoners[k].getId()][i].tier);
-                      flexQ.setDivision(body[summoners[k].getId()][i].entries[0].division)
-                      //console.log(flexQ);
-                      summoners[k].setFlexQ(flexQ);
+                    if(body[summoners[k].id][i].queue == "RANKED_FLEX_SR"){
+
+                      summoners[k].flexQ.tier = body[summoners[k].id][i].tier;
+                      summoners[k].flexQ.division = body[summoners[k].id][i].entries[0].division;
                     }
-                    if(body[summoners[k].getId()][i].queue == "RANKED_TEAM_3x3"){
+                    if(body[summoners[k].id][i].queue == "RANKED_TEAM_3x3"){
                       //TODO Summoner um 3er Q erweitern
                       // dreierQ = new rank();
                       // dreierQ.setTier(body[summoners[k].getId()][i].tier);
@@ -87,8 +87,7 @@ functions = {
                     }
                   }
                 }
-                console.log("hier");
-                console.log(summoners[0]);
+              callback(summoners);
 
               }
               if (error) {
@@ -98,7 +97,6 @@ functions = {
            }
       );
 
-      return summoners;
 
     },
 
