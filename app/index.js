@@ -29,14 +29,10 @@ bot.on("message", msg => {
 
   }
   if (msg.content.startsWith(prefix + "game")) {
-    let args = msg.content.split(" ").slice(1);
-    let z = args.length;
-    let name = args.join();
-    name = name.replace(/,/g, "");
-    let messages = lolFunctions.getGameInfo(name);
-    for(i=0;i<10;i++){
-      msg.channel.sendMessage(messages[i]);
-    }
+
+    lolService.getGameInfo(msg.content,function(response){
+      msg.channel.sendMessage(response);
+    })
 
   }
 
@@ -44,6 +40,38 @@ bot.on("message", msg => {
     msg.channel.sendMessage("bar!");
   }
 });
+
+bot.on("presenceUpdate", (newMember,prsc) => {
+
+  // console.log(prsc.guild.channels.get('229571640755748864').name)
+  // console.log(prsc.guild.channels.name)
+  // for (var [key, value] of prsc.guild.channels) {
+  //   console.log(key + " :" + value.name);
+  // }
+
+  users = {
+    'Zelle':"Skumbag Zelle",
+    'Ninalco':"Ninalco",
+    'Jerry':"Its Bear Grylls",
+    'Martin':"GM Drecksack",
+    'Sheyrow':"Shery"
+  }
+
+  if(prsc.user.username in {'Zelle':"Skumbag Zelle",'Ninalco':"Ninalco",'Jerry':"Its Bear Grylls",'Martin':"GM Drecksack",'Sheyrow':"Shery"}){
+    if(prsc.guild.presences.get(prsc.user.id).game != null){
+      if(prsc.guild.presences.get(prsc.user.id).game.name == 'League of Legends'){
+        console.log("GL HF!");
+        var message = "-game "+ users[prsc.user.username]
+        lolService.getGameInfo(message,function(response){
+          bot.sendMessage(278275541998501898,response);
+        })
+      }
+    }
+  }
+
+
+});
+
 
 bot.login("MjY4ODIwNTY4MDU5NDEyNDgx.C1gYyg.SxC5amkEx1NI8Hnqw76JP0IfpxY");
 console.log("Bot online!");

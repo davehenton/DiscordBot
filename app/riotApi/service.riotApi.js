@@ -36,8 +36,31 @@ functions = {
         })
 
     },
-    getGameInfo: function(name,sendMessage){
+    getGameInfo: function(messageContent,sendMessage){
 
+      var summoner = new summonerObj();
+
+      getNamesFromMessage(messageContent,function(formattedName,summonerName){
+        summoner.formattedName =formattedName;
+        summoner.name = summonerName;
+      })
+
+      array = [];
+      array[0] = summoner;
+
+      riotApiService.getSummonerId(array)
+      .then(function(array){
+        return riotApiService.getParticipants(array[0].id);
+      }).then(function(participants){
+        console.log("save")
+        return riotApiService.getSummonerRank(participants);
+      }).then(function(array){
+        console.log("hier")
+        for(i = 0; i < 10; i++){
+          var string = "**"+array[i].name+"**" + ": \n \t SoloQ: *"+array[i].soloQ.tier+" "+array[i].soloQ.division+"* \n \t FlexQ: *"+array[i].flexQ.tier+" "+array[i].flexQ.division+"*";
+          sendMessage(string);
+        }
+      })
     }
 
 

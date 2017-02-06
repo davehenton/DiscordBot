@@ -1,4 +1,5 @@
 var request = require('request');
+var summonerObj = require('./object.summoner.js');
 
 functions = {
 
@@ -44,7 +45,6 @@ functions = {
     },
 
     getSummonerRank: function (summoners){
-
       return new Promise(function(resolve,reject){
         var arraySize = summoners.length;
 
@@ -100,6 +100,38 @@ functions = {
 
       })
     },
+    getParticipants: function (summonerId){
+      return new Promise(function(resolve,reject){
+
+        var array = [];
+
+        for(i = 0; i < 10; i++){
+          array[i] = new summonerObj();
+        }
+
+        request.get(
+            'https://euw.api.pvp.net/observer-mode/rest/consumer/getSpectatorGameInfo/EUW1/'+summonerId+'?api_key=RGAPI-b74a4bbe-b4bc-47d3-9943-4d8c8b3bcf15',
+            { json: { key: 'value' } },
+            function (error, response, body) {
+                if (!error && response.statusCode == 200) {
+
+                  for(i = 0; i < 10; i++){
+                    array[i].name = body.participants[i].summonerName;
+                    array[i].id = body.participants[i].summonerId
+                  }
+                  resolve(array);
+                }
+                if (error) {
+                    console.log(error);
+                    reject(error);
+                }
+
+             }
+        );
+
+      })
+    },
+
 
     getChampionName: function(id){
 
