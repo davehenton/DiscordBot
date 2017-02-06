@@ -4,13 +4,4 @@ DiscordBot for educational purposes. Developt to learn [JavaScript](https://deve
 
 ---
 
-1. Basic Commands
-> -ping
-> -foo
-
-2. LoL Commands
-> -lol <Summoner Name>
->Gives the Elo of the Summoner
-
-> -game <Summoner Name>
->If the Summoner is In-Game gives the Elo of all 10 participants
+Update on Readme coming soon...
