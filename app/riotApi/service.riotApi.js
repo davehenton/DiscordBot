@@ -29,10 +29,9 @@ functions = {
         array[0] = summoner;
 
         riotApiService.getSummonerId(array).then(function(summoners){
-          return riotApiService.getSummonerRank(summoners);
+          return riotApiService.getGameData(summoners[0].id);
         }).then(function(array){
-          var returnString = "**"+array[0].name+"**" + ": \n \t SoloQ: *"+array[0].soloQ.tier+" "+array[0].soloQ.division+"* \n \t FlexQ: *"+array[0].flexQ.tier+" "+array[0].flexQ.division+"*";
-          sendMessage(returnString);
+          //write to file
         })
 
     },
@@ -52,10 +51,10 @@ functions = {
       .then(function(array){
         return riotApiService.getParticipants(array[0].id);
       }).then(function(participants){
-        console.log("save")
+
         return riotApiService.getSummonerRank(participants);
       }).then(function(array){
-        console.log("hier")
+
         for(i = 0; i < 10; i++){
           var string = "**"+array[i].name+"**" + ": \n \t SoloQ: *"+array[i].soloQ.tier+" "+array[i].soloQ.division+"* \n \t FlexQ: *"+array[i].flexQ.tier+" "+array[i].flexQ.division+"*";
           sendMessage(string);

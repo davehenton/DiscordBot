@@ -5,6 +5,8 @@ var basicFunctions = require("./basicFunctions.js");
 
 var lolService = require("./riotApi/service.riotApi.js");
 
+var googleDocService = require("./googleDocs/service.googleDoc.js")
+
 bot.on("message", msg => {
   // Set the prefix
   let prefix = "-";
@@ -21,7 +23,7 @@ bot.on("message", msg => {
 
     msg.channel.sendMessage(basicFunctions.getTime());
   }
-  if (msg.content.startsWith(prefix + "lol")) {
+  if (msg.content.startsWith(prefix + "elo")) {
 
     lolService.getRank(msg.content,function(response){
       msg.channel.sendMessage(response);
@@ -35,6 +37,13 @@ bot.on("message", msg => {
     })
 
   }
+  if (msg.content.startsWith(prefix + "save")) {
+
+    googleDocService.writeDataToFile(msg.content,function(callback){
+      msg.channel.sendMessage(callback);
+    })
+
+  }
 
   else if (msg.content.startsWith(prefix + "foo")) {
     msg.channel.sendMessage("bar!");
@@ -43,27 +52,32 @@ bot.on("message", msg => {
 
 bot.on("presenceUpdate", (newMember,prsc) => {
 
-  // console.log(prsc.guild.channels.get('229571640755748864').name)
-  // console.log(prsc.guild.channels.name)
+
   // for (var [key, value] of prsc.guild.channels) {
   //   console.log(key + " :" + value.name);
+  //   if(key == '278275541998501898'){
+  //
+  //     var channel = value;
+  //   }
+  //
   // }
-
+  //console.log(prsc.guild.channels['278275541998501898'])
   users = {
-    'Zelle':"Skumbag Zelle",
-    'Ninalco':"Ninalco",
-    'Jerry':"Its Bear Grylls",
-    'Martin':"GM Drecksack",
-    'Sheyrow':"Shery"
+    'Zelle':"Gc Ogol",
+    // 'Ninalco':"Ninalco",
+    // 'Jerry':"Its Bear Grylls",
+    // 'Martin':"GM Drecksack",
+    // 'Sheyrow':"Shery"
   }
 
-  if(prsc.user.username in {'Zelle':"Skumbag Zelle",'Ninalco':"Ninalco",'Jerry':"Its Bear Grylls",'Martin':"GM Drecksack",'Sheyrow':"Shery"}){
+  if(prsc.user.username in users){
     if(prsc.guild.presences.get(prsc.user.id).game != null){
-      if(prsc.guild.presences.get(prsc.user.id).game.name == 'League of Legends'){
-        console.log("GL HF!");
+      if(prsc.guild.presences.get(prsc.user.id).game.name == 'osu!'){
+        // console.log("GL HF!");
+        // console.log(channel.name)
         var message = "-game "+ users[prsc.user.username]
         lolService.getGameInfo(message,function(response){
-          bot.sendMessage(278275541998501898,response);
+          prsc.sendMessage(response);
         })
       }
     }

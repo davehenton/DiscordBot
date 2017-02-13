@@ -43,7 +43,6 @@ functions = {
 
       })
     },
-
     getSummonerRank: function (summoners){
       return new Promise(function(resolve,reject){
         var arraySize = summoners.length;
@@ -62,31 +61,35 @@ functions = {
                 if (!error && response.statusCode == 200) {
 
 
-                  for(k = 0; k < arraySize; k++){
-                    for(i = 0; i < Object.keys(body[summoners[k].id]).length; i++) {
+                  for (k = 0; k < arraySize; k++){
 
-                      if(body[summoners[k].id][i].queue == "RANKED_SOLO_5x5"){
+                    if(Object.keys(body).indexOf(summoners[k].id.toString()) != -1){
 
-                        summoners[k].soloQ.tier = body[summoners[k].id][i].tier;
-                        summoners[k].soloQ.division = body[summoners[k].id][i].entries[0].division;
+                        for(i = 0; i < Object.keys(body[summoners[k].id]).length; i++) {
 
-                      }
-                      if(body[summoners[k].id][i].queue == "RANKED_FLEX_SR"){
+                          if(body[summoners[k].id][i].queue == "RANKED_SOLO_5x5"){
 
-                        summoners[k].flexQ.tier = body[summoners[k].id][i].tier;
-                        summoners[k].flexQ.division = body[summoners[k].id][i].entries[0].division;
-                      }
-                      if(body[summoners[k].id][i].queue == "RANKED_TEAM_3x3"){
-                        //TODO Summoner um 3er Q erweitern
-                        // dreierQ = new rank();
-                        // dreierQ.setTier(body[summoners[k].getId()][i].tier);
-                        // dreierQ.setDivision(body[summoners[k].getId()][i].entries[0].division)
-                        // console.log(dreierQ);
+                            summoners[k].soloQ.tier = body[summoners[k].id][i].tier;
+                            summoners[k].soloQ.division = body[summoners[k].id][i].entries[0].division;
 
+                          }
+                          if(body[summoners[k].id][i].queue == "RANKED_FLEX_SR"){
+
+                            summoners[k].flexQ.tier = body[summoners[k].id][i].tier;
+                            summoners[k].flexQ.division = body[summoners[k].id][i].entries[0].division;
+                          }
+                          if(body[summoners[k].id][i].queue == "RANKED_TEAM_3x3"){
+                            //TODO Summoner um 3er Q erweitern
+                            // dreierQ = new rank();
+                            // dreierQ.setTier(body[summoners[k].getId()][i].tier);
+                            // dreierQ.setDivision(body[summoners[k].getId()][i].entries[0].division)
+                            // console.log(dreierQ);
+
+                         }
                       }
                     }
                   }
-                resolve(summoners);
+                   resolve(summoners);
 
                 }
                 if (error) {
@@ -132,7 +135,6 @@ functions = {
       })
     },
 
-
     getChampionName: function(id){
 
       var name;
@@ -154,8 +156,89 @@ functions = {
       );
 
       return name;
-    }
+    },
 
+    getRecentGameData: function(summonerId){
+
+      return new Promise(function(resolve,reject){
+
+        request.get(
+            'https://euw.api.pvp.net/api/lol/euw/v1.3/game/by-summoner/'+summonerId+'/recent?api_key=RGAPI-b74a4bbe-b4bc-47d3-9943-4d8c8b3bcf15',
+            { json: { key: 'value' } },
+            function (error, response, body) {
+                if (!error && response.statusCode == 200) {
+
+                    var gameData = {};
+
+                    gameData.gameId = body.games[0].gameId;
+                    gameData.gameType = body.games[0].subType;
+                    gameData.championId = body.games[0].championId;
+
+                    gameData.goldEarned = body.games[0].stats.goldEarned;
+                    gameData.numDeaths = body.games[0].stats.numDeaths;
+                    gameData.minionsKilled = body.games[0].stats.minionsKilled;
+                    gameData.championsKilled = body.games[0].stats.championsKilled;
+                    gameData.assists = body.games[0].stats.assists;
+                    gameData.totalDamageDealtToChampions = body.games[0].stats.totalDamageDealtToChampions;
+                    gameData.team = body.games[0].stats.team;
+                    gameData.win = body.games[0].stats.win;
+                    gameData.timePlayed = body.games[0].stats.timePlayed;
+                    gameData.wardKilled = body.games[0].stats.wardKilled;
+                    gameData.wardPlaced = body.games[0].stats.wardPlaced;
+
+
+
+                  resolve(gameData);
+                }
+                if (error) {
+                  console.log(error);
+                  reject(error);
+                }
+
+             }
+        );
+
+
+      })
+    },
+
+    getAdditionalGameData : function(gameData){
+
+      return new Promise(function(resolve,reject){
+
+        request.get(
+            'https://euw.api.pvp.net/api/lol/euw/v2.2/match/'+gameData.gameId+'?api_key=RGAPI-b74a4bbe-b4bc-47d3-9943-4d8c8b3bcf15',
+            { json: { key: 'value' } },
+            function (error, response, body) {
+                if (!error && response.statusCode == 200) {
+
+                    gameData.teamKills = 0;
+                    gameData.teamDmg = 0;
+                
+
+                    for(var i = 0; i< 10; i++){
+                      if(body.participants[i].teamId == gameData.team){
+                        gameData.teamKills += body.participants[i].stats.kills;
+                        gameData.teamDmg += body.participants[i].stats.totalDamageDealtToChampions;
+                      }
+
+                    }
+
+                  resolve(gameData);
+                }
+                if (error) {
+                  console.log(error);
+                  reject(error);
+                }
+
+             }
+        );
+
+
+
+
+      })
+   }
 }
 
 module.exports = functions;
