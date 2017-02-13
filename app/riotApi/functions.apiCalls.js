@@ -62,31 +62,35 @@ functions = {
                 if (!error && response.statusCode == 200) {
 
 
-                  for(k = 0; k < arraySize; k++){
-                    for(i = 0; i < Object.keys(body[summoners[k].id]).length; i++) {
+                  for (k = 0; k < arraySize; k++){
 
-                      if(body[summoners[k].id][i].queue == "RANKED_SOLO_5x5"){
+                    if(Object.keys(body).indexOf(summoners[k].id.toString()) != -1){
 
-                        summoners[k].soloQ.tier = body[summoners[k].id][i].tier;
-                        summoners[k].soloQ.division = body[summoners[k].id][i].entries[0].division;
+                        for(i = 0; i < Object.keys(body[summoners[k].id]).length; i++) {
 
-                      }
-                      if(body[summoners[k].id][i].queue == "RANKED_FLEX_SR"){
+                          if(body[summoners[k].id][i].queue == "RANKED_SOLO_5x5"){
 
-                        summoners[k].flexQ.tier = body[summoners[k].id][i].tier;
-                        summoners[k].flexQ.division = body[summoners[k].id][i].entries[0].division;
-                      }
-                      if(body[summoners[k].id][i].queue == "RANKED_TEAM_3x3"){
-                        //TODO Summoner um 3er Q erweitern
-                        // dreierQ = new rank();
-                        // dreierQ.setTier(body[summoners[k].getId()][i].tier);
-                        // dreierQ.setDivision(body[summoners[k].getId()][i].entries[0].division)
-                        // console.log(dreierQ);
+                            summoners[k].soloQ.tier = body[summoners[k].id][i].tier;
+                            summoners[k].soloQ.division = body[summoners[k].id][i].entries[0].division;
 
+                          }
+                          if(body[summoners[k].id][i].queue == "RANKED_FLEX_SR"){
+
+                            summoners[k].flexQ.tier = body[summoners[k].id][i].tier;
+                            summoners[k].flexQ.division = body[summoners[k].id][i].entries[0].division;
+                          }
+                          if(body[summoners[k].id][i].queue == "RANKED_TEAM_3x3"){
+                            //TODO Summoner um 3er Q erweitern
+                            // dreierQ = new rank();
+                            // dreierQ.setTier(body[summoners[k].getId()][i].tier);
+                            // dreierQ.setDivision(body[summoners[k].getId()][i].entries[0].division)
+                            // console.log(dreierQ);
+
+                         }
                       }
                     }
                   }
-                resolve(summoners);
+                   resolve(summoners);
 
                 }
                 if (error) {
