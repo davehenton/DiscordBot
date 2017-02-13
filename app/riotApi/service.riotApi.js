@@ -52,10 +52,10 @@ functions = {
       .then(function(array){
         return riotApiService.getParticipants(array[0].id);
       }).then(function(participants){
-        console.log("save")
+
         return riotApiService.getSummonerRank(participants);
       }).then(function(array){
-        console.log("hier")
+        
         for(i = 0; i < 10; i++){
           var string = "**"+array[i].name+"**" + ": \n \t SoloQ: *"+array[i].soloQ.tier+" "+array[i].soloQ.division+"* \n \t FlexQ: *"+array[i].flexQ.tier+" "+array[i].flexQ.division+"*";
           sendMessage(string);
