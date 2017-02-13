@@ -5,6 +5,8 @@ var basicFunctions = require("./basicFunctions.js");
 
 var lolService = require("./riotApi/service.riotApi.js");
 
+var googleDocService = require("./googleDocs/service.googleDoc.js")
+
 bot.on("message", msg => {
   // Set the prefix
   let prefix = "-";
@@ -32,6 +34,13 @@ bot.on("message", msg => {
 
     lolService.getGameInfo(msg.content,function(response){
       msg.channel.sendMessage(response);
+    })
+
+  }
+  if (msg.content.startsWith(prefix + "save")) {
+
+    googleDocService.writeDataToFile(msg.content,function(callback){
+      msg.channel.sendMessage(callback);
     })
 
   }

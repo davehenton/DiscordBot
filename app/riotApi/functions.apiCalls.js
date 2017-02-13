@@ -43,7 +43,6 @@ functions = {
 
       })
     },
-
     getSummonerRank: function (summoners){
       return new Promise(function(resolve,reject){
         var arraySize = summoners.length;
@@ -136,7 +135,6 @@ functions = {
       })
     },
 
-
     getChampionName: function(id){
 
       var name;
@@ -158,8 +156,89 @@ functions = {
       );
 
       return name;
-    }
+    },
 
+    getRecentGameData: function(summonerId){
+
+      return new Promise(function(resolve,reject){
+
+        request.get(
+            'https://euw.api.pvp.net/api/lol/euw/v1.3/game/by-summoner/'+summonerId+'/recent?api_key=RGAPI-b74a4bbe-b4bc-47d3-9943-4d8c8b3bcf15',
+            { json: { key: 'value' } },
+            function (error, response, body) {
+                if (!error && response.statusCode == 200) {
+
+                    var gameData = {};
+
+                    gameData.gameId = body.games[0].gameId;
+                    gameData.gameType = body.games[0].subType;
+                    gameData.championId = body.games[0].championId;
+
+                    gameData.goldEarned = body.games[0].stats.goldEarned;
+                    gameData.numDeaths = body.games[0].stats.numDeaths;
+                    gameData.minionsKilled = body.games[0].stats.minionsKilled;
+                    gameData.championsKilled = body.games[0].stats.championsKilled;
+                    gameData.assists = body.games[0].stats.assists;
+                    gameData.totalDamageDealtToChampions = body.games[0].stats.totalDamageDealtToChampions;
+                    gameData.team = body.games[0].stats.team;
+                    gameData.win = body.games[0].stats.win;
+                    gameData.timePlayed = body.games[0].stats.timePlayed;
+                    gameData.wardKilled = body.games[0].stats.wardKilled;
+                    gameData.wardPlaced = body.games[0].stats.wardPlaced;
+
+
+
+                  resolve(gameData);
+                }
+                if (error) {
+                  console.log(error);
+                  reject(error);
+                }
+
+             }
+        );
+
+
+      })
+    },
+
+    getAdditionalGameData : function(gameData){
+
+      return new Promise(function(resolve,reject){
+
+        request.get(
+            'https://euw.api.pvp.net/api/lol/euw/v2.2/match/'+gameData.gameId+'?api_key=RGAPI-b74a4bbe-b4bc-47d3-9943-4d8c8b3bcf15',
+            { json: { key: 'value' } },
+            function (error, response, body) {
+                if (!error && response.statusCode == 200) {
+
+                    gameData.teamKills = 0;
+                    gameData.teamDmg = 0;
+                
+
+                    for(var i = 0; i< 10; i++){
+                      if(body.participants[i].teamId == gameData.team){
+                        gameData.teamKills += body.participants[i].stats.kills;
+                        gameData.teamDmg += body.participants[i].stats.totalDamageDealtToChampions;
+                      }
+
+                    }
+
+                  resolve(gameData);
+                }
+                if (error) {
+                  console.log(error);
+                  reject(error);
+                }
+
+             }
+        );
+
+
+
+
+      })
+   }
 }
 
 module.exports = functions;
