@@ -53,17 +53,14 @@ bot.on("message", msg => {
 bot.on("presenceUpdate", (newMember,prsc) => {
 
 
-  // for (var [key, value] of prsc.guild.channels) {
-  //   console.log(key + " :" + value.name);
-  //   if(key == '278275541998501898'){
-  //
-  //     var channel = value;
-  //   }
-  //
-  // }
-  //console.log(prsc.guild.channels['278275541998501898'])
+  for (var [key, value] of prsc.guild.channels) {
+    if(key == '278275541998501898'){
+      var channel = value;
+    }
+  }
+
   users = {
-    'Zelle':"Gc Ogol",
+    'Zelle':"Skumbag Zelle",
     // 'Ninalco':"Ninalco",
     // 'Jerry':"Its Bear Grylls",
     // 'Martin':"GM Drecksack",
@@ -72,12 +69,12 @@ bot.on("presenceUpdate", (newMember,prsc) => {
 
   if(prsc.user.username in users){
     if(prsc.guild.presences.get(prsc.user.id).game != null){
-      if(prsc.guild.presences.get(prsc.user.id).game.name == 'osu!'){
+      if(prsc.guild.presences.get(prsc.user.id).game.name == 'League of Legends'){
         // console.log("GL HF!");
         // console.log(channel.name)
         var message = "-game "+ users[prsc.user.username]
         lolService.getGameInfo(message,function(response){
-          prsc.sendMessage(response);
+          channel.sendMessage(response);
         })
       }
     }
