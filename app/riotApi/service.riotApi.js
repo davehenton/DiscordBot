@@ -29,9 +29,10 @@ functions = {
         array[0] = summoner;
 
         riotApiService.getSummonerId(array).then(function(summoners){
-          return riotApiService.getGameData(summoners[0].id);
+          return riotApiService.getSummonerRank(summoners);
         }).then(function(array){
-          //write to file
+          var string = "**"+array[0].name+"**" + ": \n \t SoloQ: *"+array[0].soloQ.tier+" "+array[0].soloQ.division+"* \n \t FlexQ: *"+array[0].flexQ.tier+" "+array[0].flexQ.division+"*";
+          sendMessage(string);
         })
 
     },
