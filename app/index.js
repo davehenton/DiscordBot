@@ -3,9 +3,9 @@ var bot = new Discord.Client();
 
 var general = require('./general');
 
-var lolService = require("./riotApi/service.riotApi.js");
+var riotApi = require("./riotApi");
 
-var googleDocService = require("./googleDocs/service.googleDoc.js")
+var googleDocs = require("./googleDocs")
 
 bot.on("message", msg => {
   // Set the prefix
@@ -25,21 +25,21 @@ bot.on("message", msg => {
   }
   if (msg.content.startsWith(prefix + "elo")) {
 
-    lolService.getRank(msg.content,function(response){
+    riotApi.getRank(msg.content,function(response){
       msg.channel.sendMessage(response);
     })
 
   }
   if (msg.content.startsWith(prefix + "game")) {
 
-    lolService.getGameInfo(msg.content,function(response){
+    riotApi.getGameInfo(msg.content,function(response){
       msg.channel.sendMessage(response);
     })
 
   }
   if (msg.content.startsWith(prefix + "save")) {
 
-    googleDocService.writeDataToFile(msg.content,function(callback){
+    googleDocs.writeDataToFile(msg.content,function(callback){
       msg.channel.sendMessage(callback);
     })
 
@@ -73,7 +73,7 @@ bot.on("presenceUpdate", (newMember,prsc) => {
         // console.log("GL HF!");
         // console.log(channel.name)
         var message = "-game "+ users[prsc.user.username]
-        lolService.getGameInfo(message,function(response){
+        riotApi.getGameInfo(message,function(response){
           channel.sendMessage(response);
         })
       }

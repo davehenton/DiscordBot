@@ -17,7 +17,6 @@ functions = {
 
     getRank: function(messageContent,sendMessage){
 
-
         var summoner = new summonerObj();
 
         getNamesFromMessage(messageContent,function(formattedName,summonerName){
