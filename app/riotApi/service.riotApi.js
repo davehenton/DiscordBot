@@ -2,24 +2,26 @@
 var summonerObj = require('./object.summoner.js');
 var riotApiService = require('./functions.apiCalls.js');
 
-function getNamesFromMessage(messageContent,callback){
-  let args = messageContent.split(" ").slice(1);
-  let name = args.join();
-  var summonerName = name.replace(/,/g, " ");
-  var formattedName = name.replace(/,/g, "");
-  formattedName= formattedName.toLowerCase();
-  callback(formattedName,summonerName);
-}
+
 
 
 
 functions = {
 
+    getNamesFromMessage: function(messageContent,callback){
+      let args = messageContent.split(" ").slice(1);
+      let name = args.join();
+      var summonerName = name.replace(/,/g, " ");
+      var formattedName = name.replace(/,/g, "");
+      formattedName= formattedName.toLowerCase();
+      callback(formattedName,summonerName);
+    },
+
     getRank: function(messageContent,sendMessage){
 
         var summoner = new summonerObj();
 
-        getNamesFromMessage(messageContent,function(formattedName,summonerName){
+        functions.getNamesFromMessage(messageContent,function(formattedName,summonerName){
           summoner.formattedName =formattedName;
           summoner.name = summonerName;
         })
@@ -39,7 +41,7 @@ functions = {
 
       var summoner = new summonerObj();
 
-      getNamesFromMessage(messageContent,function(formattedName,summonerName){
+      functions.getNamesFromMessage(messageContent,function(formattedName,summonerName){
         summoner.formattedName =formattedName;
         summoner.name = summonerName;
       })

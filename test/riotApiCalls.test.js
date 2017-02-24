@@ -4,24 +4,29 @@ var expect = require('chai').expect;
 var riotApi = require("../app/riotApi");
 
 describe('RiotApi', function(){
-  describe('#getRank()', function(){
-    it('should return the Rank as a String',function(done){
-      riotApi.getRank("-lol Skumbag Zelle",function(response){
-        expect(response).to.be.a('string');
-        done()
-      });
-    })
-  })
-})
+  describe('#getSummonerId', function(){
+    it('should get the summoner id',function(){
 
-//In Progress
-// describe('RiotApi', function(){
-//   describe('#getGameInfo()', function(){
-//     it('should return the Rank as a String',function(done){
-//       riotApi.getGameInfo("-game Skumbag Zelle",function(response){
-//         expect(response).to.be.a('string');
-//         done()
-//       });
-//     })
-//   })
-// })
+    });
+  });
+  describe('#getSummonerRank', function(){
+    it('should get the summoner Ranks',function(){
+
+      });
+  });
+  describe('#getParticipants', function(){
+    it('should get the summoners of actual game',function(){
+
+      });
+  });
+  describe('#getChampionName', function(){
+    it('should get name of champion id',function(){
+
+      });
+  });
+  describe('#getRecentGameData', function(){
+    it('should get the data of the last game',function(){
+
+      });
+  });
+})
