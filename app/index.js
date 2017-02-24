@@ -1,7 +1,7 @@
 var Discord = require("discord.js");
 var bot = new Discord.Client();
 
-var basicFunctions = require("./basicFunctions.js");
+var general = require('./general');
 
 var lolService = require("./riotApi/service.riotApi.js");
 
