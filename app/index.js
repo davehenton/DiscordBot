@@ -21,18 +21,18 @@ bot.on("message", msg => {
   }
   if (msg.content.startsWith(prefix + "time")) {
 
-    msg.channel.sendMessage(basicFunctions.getTime());
+    msg.channel.sendMessage(general.basicFunctions.getTime());
   }
   if (msg.content.startsWith(prefix + "elo")) {
 
-    riotApi.getRank(msg.content,function(response){
+    riotApi.riotApi.getRank(msg.content,function(response){
       msg.channel.sendMessage(response);
     })
 
   }
   if (msg.content.startsWith(prefix + "game")) {
 
-    riotApi.getGameInfo(msg.content,function(response){
+    riotApi.riotApi.getGameInfo(msg.content,function(response){
       msg.channel.sendMessage(response);
     })
 
@@ -42,6 +42,7 @@ bot.on("message", msg => {
     googleDocs.writeDataToFile(msg.content,function(callback){
       msg.channel.sendMessage(callback);
     })
+    msg.channel.sendMessage("Momentan außer Betrieb")
 
   }
 
@@ -73,7 +74,7 @@ bot.on("presenceUpdate", (newMember,prsc) => {
         // console.log("GL HF!");
         // console.log(channel.name)
         var message = "-game "+ users[prsc.user.username]
-        riotApi.getGameInfo(message,function(response){
+        riotApi.riotApi.getGameInfo(message,function(response){
           channel.sendMessage(response);
         })
       }

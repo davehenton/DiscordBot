@@ -21,7 +21,7 @@ functions = {
 
         var summoner = new summonerObj();
 
-        functions.getNamesFromMessage(messageContent,function(formattedName,summonerName){
+        this.getNamesFromMessage(messageContent,function(formattedName,summonerName){
           summoner.formattedName =formattedName;
           summoner.name = summonerName;
         })
@@ -41,7 +41,7 @@ functions = {
 
       var summoner = new summonerObj();
 
-      functions.getNamesFromMessage(messageContent,function(formattedName,summonerName){
+      this.getNamesFromMessage(messageContent,function(formattedName,summonerName){
         summoner.formattedName =formattedName;
         summoner.name = summonerName;
       })

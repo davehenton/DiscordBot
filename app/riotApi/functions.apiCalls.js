@@ -1,4 +1,4 @@
-var request = require('request');
+var https = require('https');
 var summonerObj = require('./object.summoner.js');
 
 functions = {
@@ -13,12 +13,11 @@ functions = {
         }
         names.join();
 
-        request.get(
-            'https://euw.api.pvp.net/api/lol/euw/v1.4/summoner/by-name/'+names+'?api_key=RGAPI-b74a4bbe-b4bc-47d3-9943-4d8c8b3bcf15',
-            { json: { key: 'value' } },
-            function (error, response, body) {
-                if (!error && response.statusCode == 200) {
-
+        https.get('https://euw.api.pvp.net/api/lol/euw/v1.4/summoner/by-name/'+names+'?api_key=RGAPI-b74a4bbe-b4bc-47d3-9943-4d8c8b3bcf15',(response) => {
+                response.setEncoding('utf8');
+                response.on('data', (body) => {
+                try {
+                  body = JSON.parse(body);
                   for(k = 0; k < arraySize; k++){
                     for(i = 0; i < Object.keys(body).length; i++) {
 
@@ -32,15 +31,16 @@ functions = {
                   }
 
                   resolve(summoners);
+                } catch(e) {
+                  console.log(e);
+                  reject(e);
                 }
-                if (error) {
-                  console.log(error);
-                  reject(error);
-                }
+                })
+                response.on('error', (e) => {
+                  reject(e)
+                })
 
-             }
-        );
-
+             });
       })
     },
     getSummonerRank: function (summoners){
@@ -54,53 +54,51 @@ functions = {
         ids.join();
 
 
-        request.get(
-            'https://euw.api.pvp.net/api/lol/euw/v2.5/league/by-summoner/'+ids+'/entry?api_key=RGAPI-b74a4bbe-b4bc-47d3-9943-4d8c8b3bcf15',
-            { json: { key: 'value' } },
-            function (error, response, body) {
-                if (!error && response.statusCode == 200) {
+        https.get('https://euw.api.pvp.net/api/lol/euw/v2.5/league/by-summoner/'+ids+'/entry?api_key=RGAPI-b74a4bbe-b4bc-47d3-9943-4d8c8b3bcf15',(response) => {
+                response.setEncoding('utf8');
+                response.on('data', (body) => {
+                try {
+                  body = JSON.parse(body);
+                    for (k = 0; k < arraySize; k++){
 
+                      if(Object.keys(body).indexOf(summoners[k].id.toString()) != -1){
 
-                  for (k = 0; k < arraySize; k++){
+                          for(i = 0; i < Object.keys(body[summoners[k].id]).length; i++) {
 
-                    if(Object.keys(body).indexOf(summoners[k].id.toString()) != -1){
+                            if(body[summoners[k].id][i].queue == "RANKED_SOLO_5x5"){
 
-                        for(i = 0; i < Object.keys(body[summoners[k].id]).length; i++) {
+                              summoners[k].soloQ.tier = body[summoners[k].id][i].tier;
+                              summoners[k].soloQ.division = body[summoners[k].id][i].entries[0].division;
 
-                          if(body[summoners[k].id][i].queue == "RANKED_SOLO_5x5"){
+                            }
+                            if(body[summoners[k].id][i].queue == "RANKED_FLEX_SR"){
 
-                            summoners[k].soloQ.tier = body[summoners[k].id][i].tier;
-                            summoners[k].soloQ.division = body[summoners[k].id][i].entries[0].division;
+                              summoners[k].flexQ.tier = body[summoners[k].id][i].tier;
+                              summoners[k].flexQ.division = body[summoners[k].id][i].entries[0].division;
+                            }
+                            if(body[summoners[k].id][i].queue == "RANKED_TEAM_3x3"){
+                              //TODO Summoner um 3er Q erweitern
+                              // dreierQ = new rank();
+                              // dreierQ.setTier(body[summoners[k].getId()][i].tier);
+                              // dreierQ.setDivision(body[summoners[k].getId()][i].entries[0].division)
+                              // console.log(dreierQ);
 
-                          }
-                          if(body[summoners[k].id][i].queue == "RANKED_FLEX_SR"){
-
-                            summoners[k].flexQ.tier = body[summoners[k].id][i].tier;
-                            summoners[k].flexQ.division = body[summoners[k].id][i].entries[0].division;
-                          }
-                          if(body[summoners[k].id][i].queue == "RANKED_TEAM_3x3"){
-                            //TODO Summoner um 3er Q erweitern
-                            // dreierQ = new rank();
-                            // dreierQ.setTier(body[summoners[k].getId()][i].tier);
-                            // dreierQ.setDivision(body[summoners[k].getId()][i].entries[0].division)
-                            // console.log(dreierQ);
-
-                         }
+                           }
+                        }
                       }
                     }
-                  }
-                   resolve(summoners);
-
-                }
-                if (error) {
-                  console.log(error);
-                  reject(error);
+                     resolve(summoners);
+                } catch (e) {
+                  console.log(e);
+                  reject(e);
                 }
 
-             }
-        );
+                })
+                response.on('error', (e) => {
+                  reject(e)
+                })
 
-
+             });
       })
     },
     getParticipants: function (summonerId){
@@ -112,63 +110,47 @@ functions = {
           array[i] = new summonerObj();
         }
 
-        request.get(
-            'https://euw.api.pvp.net/observer-mode/rest/consumer/getSpectatorGameInfo/EUW1/'+summonerId+'?api_key=RGAPI-b74a4bbe-b4bc-47d3-9943-4d8c8b3bcf15',
-            { json: { key: 'value' } },
-            function (error, response, body) {
-                if (!error && response.statusCode == 200) {
-
-                  for(i = 0; i < 10; i++){
-                    array[i].name = body.participants[i].summonerName;
-                    array[i].id = body.participants[i].summonerId
-                  }
-                  resolve(array);
-                }
-                if (error) {
-                    console.log(error);
-                    reject(error);
+        https.get('https://euw.api.pvp.net/observer-mode/rest/consumer/getSpectatorGameInfo/EUW1/'+summonerId+'?api_key=RGAPI-b74a4bbe-b4bc-47d3-9943-4d8c8b3bcf15',(response) => {
+                response.setEncoding('utf8');
+                response.on('data', (body) => {
+                try {
+                  body = JSON.parse(body);
+                    for(i = 0; i < 10; i++){
+                      array[i].name = body.participants[i].summonerName;
+                      array[i].id = body.participants[i].summonerId
+                    }
+                    resolve(array);
+                } catch (e) {
+                  console.log(e)
+                  reject(e)
                 }
 
-             }
-        );
+                });
+                response.on('error', (e) => {
+                  reject(e)
+                })
+
+             });
 
       })
     },
 
     getChampionName: function(id){
 
-      var name;
 
-      request.get(
-          'https://global.api.pvp.net/api/lol/static-data/euw/v1.2/champion/'+id+'?api_key=RGAPI-b74a4bbe-b4bc-47d3-9943-4d8c8b3bcf15',
-          { json: { key: 'value' } },
-          function (error, response, body) {
-              if (!error && response.statusCode == 200) {
-
-                name = body.name;
-
-              }
-              if (error) {
-                console.log(error);
-              }
-
-           }
-      );
-
-      return name;
     },
 
     getRecentGameData: function(summonerId){
 
       return new Promise(function(resolve,reject){
 
-        request.get(
-            'https://euw.api.pvp.net/api/lol/euw/v1.3/game/by-summoner/'+summonerId+'/recent?api_key=RGAPI-b74a4bbe-b4bc-47d3-9943-4d8c8b3bcf15',
-            { json: { key: 'value' } },
-            function (error, response, body) {
-                if (!error && response.statusCode == 200) {
+        https.get('https://euw.api.pvp.net/api/lol/euw/v1.3/game/by-summoner/'+summonerId+'/recent?api_key=RGAPI-b74a4bbe-b4bc-47d3-9943-4d8c8b3bcf15',(response) => {
+                response.setEncoding('utf8');
 
-                    var gameData = {};
+                response.on('data', (body) => {
+                  var gameData = {};
+                  try {
+                    JSON.parse(body);
 
                     gameData.gameId = body.games[0].gameId;
                     gameData.gameType = body.games[0].subType;
@@ -186,19 +168,19 @@ functions = {
                     gameData.wardKilled = body.games[0].stats.wardKilled;
                     gameData.wardPlaced = body.games[0].stats.wardPlaced;
 
-
-
                   resolve(gameData);
+                } catch (e) {
+                  console.log(e)
+                  reject(gameData)
                 }
-                if (error) {
-                  console.log(error);
-                  reject(error);
-                }
 
-             }
-        );
+                })
+                response.on('error', (e) => {
+                  reject(e)
+                })
 
 
+             });
       })
     },
 
@@ -206,15 +188,13 @@ functions = {
 
       return new Promise(function(resolve,reject){
 
-        request.get(
-            'https://euw.api.pvp.net/api/lol/euw/v2.2/match/'+gameData.gameId+'?api_key=RGAPI-b74a4bbe-b4bc-47d3-9943-4d8c8b3bcf15',
-            { json: { key: 'value' } },
-            function (error, response, body) {
-                if (!error && response.statusCode == 200) {
-
+        https.get('https://euw.api.pvp.net/api/lol/euw/v2.2/match/'+gameData.gameId+'?api_key=RGAPI-b74a4bbe-b4bc-47d3-9943-4d8c8b3bcf15', (response) => {
+                response.setEncoding('utf8');
+                response.on('data', (body) => {
+                body = JSON.parse(body);
                     gameData.teamKills = 0;
                     gameData.teamDmg = 0;
-                
+
 
                     for(var i = 0; i< 10; i++){
                       if(body.participants[i].teamId == gameData.team){
@@ -225,17 +205,12 @@ functions = {
                     }
 
                   resolve(gameData);
-                }
-                if (error) {
-                  console.log(error);
-                  reject(error);
-                }
+                })
+                response.on('error', (e) => {
+                  reject(e)
+                })
 
-             }
-        );
-
-
-
+             });
 
       })
    }
