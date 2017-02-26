@@ -148,10 +148,11 @@ functions = {
                 response.setEncoding('utf8');
 
                 response.on('data', (body) => {
+
                   var gameData = {};
                   try {
-                    JSON.parse(body);
-
+                    body = JSON.parse(body);
+                    
                     gameData.gameId = body.games[0].gameId;
                     gameData.gameType = body.games[0].subType;
                     gameData.championId = body.games[0].championId;
