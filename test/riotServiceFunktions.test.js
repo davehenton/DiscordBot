@@ -2,6 +2,7 @@ var assert = require('chai').assert;
 var expect = require('chai').expect;
 
 var riotApi = require("../app/riotApi");
+var googleDocs = require("../app/googleDocs");
 
 
 describe('RiotApiService', function(){
@@ -22,6 +23,15 @@ describe('RiotApiService', function(){
       });
     })
   });
+  describe('#saveGameData()', function(){
+    it('should return the Game Data as a String', function(done){
+      this.timeout(5000)
+      googleDocs.writeDataToFile("-save Skumbag Zelle",function(response){
+        expect(response).to.be.a('string');
+        done()
+      })
+    })
+  })
 })
 
 

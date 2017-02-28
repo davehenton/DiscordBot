@@ -151,25 +151,28 @@ functions = {
 
                   var gameData = {};
                   try {
-                    body = JSON.parse(body);
-                    
-                    gameData.gameId = body.games[0].gameId;
-                    gameData.gameType = body.games[0].subType;
-                    gameData.championId = body.games[0].championId;
 
-                    gameData.goldEarned = body.games[0].stats.goldEarned;
-                    gameData.numDeaths = body.games[0].stats.numDeaths;
-                    gameData.minionsKilled = body.games[0].stats.minionsKilled;
-                    gameData.championsKilled = body.games[0].stats.championsKilled;
-                    gameData.assists = body.games[0].stats.assists;
-                    gameData.totalDamageDealtToChampions = body.games[0].stats.totalDamageDealtToChampions;
-                    gameData.team = body.games[0].stats.team;
-                    gameData.win = body.games[0].stats.win;
-                    gameData.timePlayed = body.games[0].stats.timePlayed;
-                    gameData.wardKilled = body.games[0].stats.wardKilled;
-                    gameData.wardPlaced = body.games[0].stats.wardPlaced;
 
-                  resolve(gameData);
+                      body = JSON.parse(body)
+                      gameData.gameId = body.games[0].gameId;
+                      gameData.gameType = body.games[0].subType;
+                      gameData.championId = body.games[0].championId;
+
+                      gameData.goldEarned = body.games[0].stats.goldEarned;
+                      gameData.numDeaths = body.games[0].stats.numDeaths;
+                      gameData.minionsKilled = body.games[0].stats.minionsKilled;
+                      gameData.championsKilled = body.games[0].stats.championsKilled;
+                      gameData.assists = body.games[0].stats.assists;
+                      gameData.totalDamageDealtToChampions = body.games[0].stats.totalDamageDealtToChampions;
+                      gameData.team = body.games[0].stats.team;
+                      gameData.win = body.games[0].stats.win;
+                      gameData.timePlayed = body.games[0].stats.timePlayed;
+                      gameData.wardKilled = body.games[0].stats.wardKilled;
+                      gameData.wardPlaced = body.games[0].stats.wardPlaced;
+
+                      resolve(gameData)
+
+
                 } catch (e) {
                   console.log(e)
                   reject(gameData)
