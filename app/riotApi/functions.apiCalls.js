@@ -15,9 +15,13 @@ functions = {
 
         https.get('https://euw.api.pvp.net/api/lol/euw/v1.4/summoner/by-name/'+names+'?api_key=RGAPI-b74a4bbe-b4bc-47d3-9943-4d8c8b3bcf15',(response) => {
                 response.setEncoding('utf8');
-                response.on('data', (body) => {
+                rawData = "";
+                response.on('data', (chunk) => {
+                  rawData = chunk;
+                })
+                response.on('end', () => {
                 try {
-                  body = JSON.parse(body);
+                  body = JSON.parse(rawData);
                   for(k = 0; k < arraySize; k++){
                     for(i = 0; i < Object.keys(body).length; i++) {
 
@@ -56,9 +60,13 @@ functions = {
 
         https.get('https://euw.api.pvp.net/api/lol/euw/v2.5/league/by-summoner/'+ids+'/entry?api_key=RGAPI-b74a4bbe-b4bc-47d3-9943-4d8c8b3bcf15',(response) => {
                 response.setEncoding('utf8');
-                response.on('data', (body) => {
+                var rawData = "";
+                response.on('data', (chunk) => {
+                  rawData += chunk;
+                })
+                response.on('end', () => {
                 try {
-                  body = JSON.parse(body);
+                  body = JSON.parse(rawData);
                     for (k = 0; k < arraySize; k++){
 
                       if(Object.keys(body).indexOf(summoners[k].id.toString()) != -1){
@@ -112,9 +120,13 @@ functions = {
 
         https.get('https://euw.api.pvp.net/observer-mode/rest/consumer/getSpectatorGameInfo/EUW1/'+summonerId+'?api_key=RGAPI-b74a4bbe-b4bc-47d3-9943-4d8c8b3bcf15',(response) => {
                 response.setEncoding('utf8');
-                response.on('data', (body) => {
+                var rawData = "";
+                response.on('data', (chunk) => {
+                  rawData += chunk;
+                })
+                response.on('end', () => {
                 try {
-                  body = JSON.parse(body);
+                  body = JSON.parse(rawData);
                     for(i = 0; i < 10; i++){
                       array[i].name = body.participants[i].summonerName;
                       array[i].id = body.participants[i].summonerId
@@ -146,14 +158,15 @@ functions = {
 
         https.get('https://euw.api.pvp.net/api/lol/euw/v1.3/game/by-summoner/'+summonerId+'/recent?api_key=RGAPI-b74a4bbe-b4bc-47d3-9943-4d8c8b3bcf15',(response) => {
                 response.setEncoding('utf8');
+                var gameData = {};
+                var rawData = "";
 
-                response.on('data', (body) => {
-
-                  var gameData = {};
+                response.on('data', (chunk) => {
+                  rawData += chunk;
+                })
+                response.on('end', () => {
                   try {
-
-
-                      body = JSON.parse(body)
+                      body = JSON.parse(rawData)
                       gameData.gameId = body.games[0].gameId;
                       gameData.gameType = body.games[0].subType;
                       gameData.championId = body.games[0].championId;
@@ -171,7 +184,6 @@ functions = {
                       gameData.wardPlaced = body.games[0].stats.wardPlaced;
 
                       resolve(gameData)
-
 
                 } catch (e) {
                   console.log(e)
@@ -194,21 +206,30 @@ functions = {
 
         https.get('https://euw.api.pvp.net/api/lol/euw/v2.2/match/'+gameData.gameId+'?api_key=RGAPI-b74a4bbe-b4bc-47d3-9943-4d8c8b3bcf15', (response) => {
                 response.setEncoding('utf8');
-                response.on('data', (body) => {
-                body = JSON.parse(body);
-                    gameData.teamKills = 0;
-                    gameData.teamDmg = 0;
+                var rawData = "";
+                response.on('data', (chunk) => {
+                  rawData += chunk;
+                })
+                response.on('end', () => {
+                  try{
+                    body = JSON.parse(rawData);
+                        gameData.teamKills = 0;
+                        gameData.teamDmg = 0;
 
 
-                    for(var i = 0; i< 10; i++){
-                      if(body.participants[i].teamId == gameData.team){
-                        gameData.teamKills += body.participants[i].stats.kills;
-                        gameData.teamDmg += body.participants[i].stats.totalDamageDealtToChampions;
-                      }
+                        for(var i = 0; i< 10; i++){
+                          if(body.participants[i].teamId == gameData.team){
+                            gameData.teamKills += body.participants[i].stats.kills;
+                            gameData.teamDmg += body.participants[i].stats.totalDamageDealtToChampions;
+                          }
 
-                    }
+                        }
 
-                  resolve(gameData);
+                      resolve(gameData);
+                  } catch(e){
+                    console.log(e)
+                  }
+
                 })
                 response.on('error', (e) => {
                   reject(e)
