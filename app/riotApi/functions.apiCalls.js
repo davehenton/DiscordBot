@@ -149,6 +149,7 @@ functions = {
 
     getChampionName: function(id){
 
+      //URL: https://global.api.pvp.net/api/lol/static-data/euw/v1.2/champion/CHAMPION_ID?api_key=RGAPI-b74a4bbe-b4bc-47d3-9943-4d8c8b3bcf15
 
     },
 

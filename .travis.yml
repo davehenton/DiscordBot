@@ -7,3 +7,6 @@ install:
   - npm install
 script:
   - npm test
+addons:
+    code_climate:
+        repo_token: 8b551f8623052df742dff6937860b639f85fb2539765d5d7b7808a1c1f1e037d
