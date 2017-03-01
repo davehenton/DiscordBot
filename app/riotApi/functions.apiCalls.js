@@ -225,6 +225,7 @@ functions = {
 
                         }
 
+
                       resolve(gameData);
                   } catch(e){
                     console.log(e)

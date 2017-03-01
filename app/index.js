@@ -39,7 +39,7 @@ bot.on("message", msg => {
   }
   if (msg.content.startsWith(prefix + "save")) {
 
-    googleDocs.writeDataToFile(msg.content,function(callback){
+    riotApi.riotApi.getLastGameData(msg.content,function(callback){
       msg.channel.sendMessage(callback);
     })
     msg.channel.sendMessage("Momentan außer Betrieb")

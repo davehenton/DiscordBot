@@ -26,7 +26,7 @@ describe('RiotApiService', function(){
   describe('#saveGameData()', function(){
     it('should return the Game Data as a String', function(done){
       this.timeout(5000)
-      googleDocs.writeDataToFile("-save Skumbag Zelle",function(response){
+      riotApi.riotApi.getLastGameData("-save Skumbag Zelle",function(response){
         expect(response).to.be.a('string');
         done()
       })

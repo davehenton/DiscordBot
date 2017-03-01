@@ -152,4 +152,31 @@ describe('RiotApi', function(){
       });
     });
   });
+  describe('#getAdditionalGameData', function(){
+    it('should get the additional data of the last game',function(done){
+      var expected = require('./riotApiCallsExamples/responseAdditionalGameData.json');
+      var response = new PassThrough();
+      response.write(JSON.stringify(expected));
+      response.end();
+
+      var request = new PassThrough();
+
+      this.request.callsArgWith(1, response)
+                  .returns(request);
+
+
+      var gameData = {
+        gameId: "3083718410",
+        team: "100"
+      }
+
+      riotApi.apiFunctions.getAdditionalGameData(gameData).then(function(gameData){
+
+          expect(gameData.teamKills).to.equal(6);
+          expect(gameData.teamDmg).to.equal(59278);
+
+        done()
+      });
+    });
+  });
 });
