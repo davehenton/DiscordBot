@@ -11,7 +11,7 @@ describe('RiotApiService', function(){
       riotApi.riotApi.getNamesFromMessage("-lol Skumbag Zelle",function(formattedName,summonerName){
         expect(formattedName).to.equal('skumbagzelle');
         expect(summonerName).to.equal('Skumbag Zelle');
-        done()
+        done();
       });
     })
   });
