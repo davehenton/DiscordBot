@@ -1,0 +1,48 @@
+{
+  "48918098": [
+    {
+      "name": "Nunu's Mercenaries",
+      "tier": "PLATINUM",
+      "queue": "RANKED_SOLO_5x5",
+      "entries": [
+        {
+          "playerOrTeamId": "48918098",
+          "playerOrTeamName": "Skumbag Zelle",
+          "division": "II",
+          "leaguePoints": 35,
+          "wins": 32,
+          "losses": 23,
+          "isHotStreak": false,
+          "isVeteran": false,
+          "isFreshBlood": false,
+          "isInactive": false
+        }
+      ]
+    },
+    {
+      "name": "Jax's Justicars",
+      "tier": "PLATINUM",
+      "queue": "RANKED_FLEX_SR",
+      "entries": [
+        {
+          "playerOrTeamId": "48918098",
+          "playerOrTeamName": "Skumbag Zelle",
+          "division": "V",
+          "leaguePoints": 100,
+          "wins": 66,
+          "losses": 56,
+          "isHotStreak": false,
+          "isVeteran": false,
+          "isFreshBlood": false,
+          "isInactive": false,
+          "miniSeries": {
+            "target": 2,
+            "wins": 1,
+            "losses": 1,
+            "progress": "LWN"
+          }
+        }
+      ]
+    }
+  ]
+}

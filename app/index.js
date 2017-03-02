@@ -1,18 +1,18 @@
-var Discord = require("discord.js");
-var bot = new Discord.Client();
-
-var basicFunctions = require("./basicFunctions.js");
-
-var lolService = require("./riotApi/service.riotApi.js");
-
-var googleDocService = require("./googleDocs/service.googleDoc.js")
-
-
 var opbeat = require('opbeat').start({
   appId: 'acb18586e0',
   organizationId: '7e199a286dc34c699a120495c34d40d8',
   secretToken: 'b3202da9abb11109225b618979286b7c50630f91'
 })
+
+var Discord = require("discord.js");
+var bot = new Discord.Client();
+
+var general = require('./general');
+
+var riotApi = require("./riotApi");
+
+var googleDocs = require("./googleDocs")
+
 
 bot.on("message", msg => {
   // Set the prefix
@@ -28,27 +28,28 @@ bot.on("message", msg => {
   }
   if (msg.content.startsWith(prefix + "time")) {
 
-    msg.channel.sendMessage(basicFunctions.getTime());
+    msg.channel.sendMessage(general.basicFunctions.getTime());
   }
   if (msg.content.startsWith(prefix + "elo")) {
 
-    lolService.getRank(msg.content,function(response){
+    riotApi.riotApi.getRank(msg.content,function(response){
       msg.channel.sendMessage(response);
     })
 
   }
   if (msg.content.startsWith(prefix + "game")) {
 
-    lolService.getGameInfo(msg.content,function(response){
+    riotApi.riotApi.getGameInfo(msg.content,function(response){
       msg.channel.sendMessage(response);
     })
 
   }
   if (msg.content.startsWith(prefix + "save")) {
 
-    googleDocService.writeDataToFile(msg.content,function(callback){
+    riotApi.riotApi.getLastGameData(msg.content,function(callback){
       msg.channel.sendMessage(callback);
     })
+    msg.channel.sendMessage("Momentan außer Betrieb")
 
   }
 
@@ -80,7 +81,7 @@ bot.on("presenceUpdate", (newMember,prsc) => {
         // console.log("GL HF!");
         // console.log(channel.name)
         var message = "-game "+ users[prsc.user.username]
-        lolService.getGameInfo(message,function(response){
+        riotApi.riotApi.getGameInfo(message,function(response){
           channel.sendMessage(response);
         })
       }

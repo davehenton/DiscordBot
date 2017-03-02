@@ -1,2 +1,3 @@
 ﻿#Gitignore File
 node_modules
+.idea
