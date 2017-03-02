@@ -1,3 +1,9 @@
+var opbeat = require('opbeat').start({
+  appId: 'acb18586e0',
+  organizationId: '7e199a286dc34c699a120495c34d40d8',
+  secretToken: 'b3202da9abb11109225b618979286b7c50630f91'
+})
+
 var Discord = require("discord.js");
 var bot = new Discord.Client();
 
@@ -7,12 +13,6 @@ var riotApi = require("./riotApi");
 
 var googleDocs = require("./googleDocs")
 
-
-var opbeat = require('opbeat').start({
-  appId: 'acb18586e0',
-  organizationId: '7e199a286dc34c699a120495c34d40d8',
-  secretToken: 'b3202da9abb11109225b618979286b7c50630f91'
-})
 
 bot.on("message", msg => {
   // Set the prefix
